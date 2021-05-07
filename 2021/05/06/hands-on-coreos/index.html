@@ -1,0 +1,543 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <link rel="icon" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="theme-color" content="#04425E">
+  <meta name="description" content="羰基的博客">
+  <meta name="author" content="Karuboniru">
+  <meta name="keywords" content="技术, 杂谈, 吐槽">
+  
+  <title>上手 Fedora CoreOS，以搭建代理为例 - Karuboniru&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749771_l0gzaaun88e.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/addon.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yanqiyu.info","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":"UA-109230557-1","tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null},"tajs":null}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.0.2"><link rel="alternate" href="/atom.xml" title="Karuboniru's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Karuboniru's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/default.webp') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="上手 Fedora CoreOS，以搭建代理为例">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-05-06 23:32" pubdate>
+        星期四, 五月 6日 2021, 11:32 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      29
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">上手 Fedora CoreOS，以搭建代理为例</h1>
+            
+            <div class="markdown-body">
+              <p>前几天，Vultr 的洛杉矶机房维护，我的主力代理自然就断掉了，于是临时启动了一个机器用来救急。虽然有一个脚本用来处理配置代理需要的步骤，但是因为脚本忘了写防火墙规则导致我迷惑了足足有半分钟（然后想起来我上次用这个脚本的时候也是手动 ssh 上去添加防火墙规则的）。</p>
+<p>退一步越想越气，于是突然想到妮可艹提到过 <a target="_blank" rel="noopener" href="https://getfedora.org/en/coreos?stream=stable">Fedora CoreOS</a> 很适合这类工作，顺便我正好学习下这东西怎么用。</p>
+<h2 id="在-vultr-上通过-coreos-部署-v2ray">在 Vultr 上通过 CoreOS 部署 V2ray</h2>
+<p>说干就干，先看看<a target="_blank" rel="noopener" href="https://docs.fedoraproject.org/en-US/fedora-coreos/">文档</a>，琢磨琢磨，然后糊一个 Fedora CoreOS Config 文件。 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">variant:</span> <span class="hljs-string">fcos</span><br><span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span><br><span class="hljs-attr">passwd:</span><br>  <span class="hljs-attr">users:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">core</span><br>      <span class="hljs-attr">ssh_authorized_keys:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFlngteAj8k7Fv0Ht6dFtQvA+Svxn/qnTuDfUzEvaU33QEyN9jDaJyMdct4elU9ec9aQheskwv5ULSvv7lzgs4ZhgtgGNRfH0mC8cI49DGdSxucaAuPiHmKNTfQa88iZxg== CARD AUTH pubkey pkcs11:id=%04;object=CARD%20AUTH%20pubkey;token=Karuboniru;manufacturer=piv_II?module-path=/usr/lib64/pkcs11/opensc-pkcs11.so&quot;</span><br>      <span class="hljs-attr">groups:</span> [ <span class="hljs-string">sudo</span>, <span class="hljs-string">wheel</span> ]<br><span class="hljs-attr">storage:</span><br>  <span class="hljs-attr">files:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/var/lib/v2ray/config.json</span><br>      <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <br>        <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>          &#123;<br>            <span class="hljs-attr">&quot;inbounds&quot;:</span> [<br>              &#123;<br>                <span class="hljs-attr">&quot;port&quot;:</span> <span class="hljs-string">&lt;YOUR-PORT-HERE&gt;</span>,<br>                <span class="hljs-attr">&quot;protocol&quot;:</span> <span class="hljs-string">&quot;vmess&quot;</span>,<br>                <span class="hljs-attr">&quot;settings&quot;:</span> &#123;<br>                  <span class="hljs-attr">&quot;clients&quot;:</span> [<br>                    &#123;<br>                      <span class="hljs-attr">&quot;id&quot;:</span> <span class="hljs-string">&quot;&lt;YOUR-UUID-HERE&gt;&quot;</span>,<br>                      <span class="hljs-attr">&quot;alterId&quot;:</span> <span class="hljs-number">64</span><br>                    &#125;   <br>                  ]<br>                &#125;<br>              &#125;<br>            ],<br>            <span class="hljs-attr">&quot;outbounds&quot;:</span> [<br>              &#123;<br>                <span class="hljs-attr">&quot;protocol&quot;:</span> <span class="hljs-string">&quot;freedom&quot;</span>,<br>                <span class="hljs-attr">&quot;settings&quot;:</span> &#123;&#125;<br>              &#125;<br>            ]<br>          &#125;<br>      <span class="hljs-attr">mode:</span> <span class="hljs-number">0644</span><br><span class="hljs-attr">systemd:</span><br>  <span class="hljs-attr">units:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">v2ray.service</span><br>      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <span class="hljs-string">|</span><br>        [<span class="hljs-string">Unit</span>]<br>        <span class="hljs-string">Description=Run</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">After=network-online.target</span><br>        <span class="hljs-string">Wants=network-online.target</span><br><br>        [<span class="hljs-string">Service</span>]<br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">kill</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">rm</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">pull</span> <span class="hljs-string">docker.io/v2fly/v2fly-core:latest</span><br>        <span class="hljs-string">ExecStart=/bin/podman</span> <span class="hljs-string">run</span> <span class="hljs-string">--name</span> <span class="hljs-string">v2ray</span> <span class="hljs-string">--volume</span> <span class="hljs-string">/var/lib/v2ray:/etc/v2ray:z</span> <span class="hljs-string">--net=host</span> <span class="hljs-string">docker.io/v2fly/v2fly-core:latest</span><br>        <span class="hljs-string">ExecStop=/bin/podman</span> <span class="hljs-string">stop</span> <span class="hljs-string">v2ray</span><br><br>        [<span class="hljs-string">Install</span>]<br>        <span class="hljs-string">WantedBy=multi-user.target</span><br></code></pre></div></td></tr></table></figure> 我们来拆开看看这个文件 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">variant:</span> <span class="hljs-string">fcos</span><br><span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span><br></code></pre></div></td></tr></table></figure> 上面意思是我要构建一个 <code>fcos</code> 系统，并且配置文件格式是 <code>1.0.0</code>。</p>
+<p><code>"ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFlngteAj8k7Fv0Ht6dFtQvA+Svxn/qnTuDfUzEvaU33QEyN9jDaJyMdct4elU9ec9aQheskwv5ULSvv7lzgs4ZhgtgGNRfH0mC8cI49DGdSxucaAuPiHmKNTfQa88iZxg== CARD AUTH pubkey pkcs11:id=%04;object=CARD%20AUTH%20pubkey;token=Karuboniru;manufacturer=piv_II?module-path=/usr/lib64/pkcs11/opensc-pkcs11.so"</code> 是我的 ssh 公钥，之后需要维护可能用到。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">storage:</span><br>  <span class="hljs-attr">files:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/var/lib/v2ray/config.json</span><br>      <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <br>        <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>          &#123;<br>            <span class="hljs-attr">&quot;inbounds&quot;:</span> [<br>              &#123;<br>                <span class="hljs-attr">&quot;port&quot;:</span> <span class="hljs-string">&lt;YOUR-PORT-HERE&gt;</span>,<br>                <span class="hljs-attr">&quot;protocol&quot;:</span> <span class="hljs-string">&quot;vmess&quot;</span>,<br>                <span class="hljs-attr">&quot;settings&quot;:</span> &#123;<br>                  <span class="hljs-attr">&quot;clients&quot;:</span> [<br>                    &#123;<br>                      <span class="hljs-attr">&quot;id&quot;:</span> <span class="hljs-string">&quot;&lt;YOUR-UUID-HERE&gt;&quot;</span>,<br>                      <span class="hljs-attr">&quot;alterId&quot;:</span> <span class="hljs-number">64</span><br>                    &#125;   <br>                  ]<br>                &#125;<br>              &#125;<br>            ],<br>            <span class="hljs-attr">&quot;outbounds&quot;:</span> [<br>              &#123;<br>                <span class="hljs-attr">&quot;protocol&quot;:</span> <span class="hljs-string">&quot;freedom&quot;</span>,<br>                <span class="hljs-attr">&quot;settings&quot;:</span> &#123;&#125;<br>              &#125;<br>            ]<br>          &#125;<br>      <span class="hljs-attr">mode:</span> <span class="hljs-number">0644</span><br></code></pre></div></td></tr></table></figure>
+<p>这是放一个配置文件到 <code>/var/lib/v2ray/config.json</code>，至于 <code>/etc</code> 尽可能留给包管理。</p>
+<p>最后是添加一个自动启动的 systemd unit <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">systemd:</span><br>  <span class="hljs-attr">units:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">v2ray.service</span><br>      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <span class="hljs-string">|</span><br>        [<span class="hljs-string">Unit</span>]<br>        <span class="hljs-string">Description=Run</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">After=network-online.target</span><br>        <span class="hljs-string">Wants=network-online.target</span><br><br>        [<span class="hljs-string">Service</span>]<br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">kill</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">rm</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">pull</span> <span class="hljs-string">docker.io/v2fly/v2fly-core:latest</span><br>        <span class="hljs-string">ExecStart=/bin/podman</span> <span class="hljs-string">run</span> <span class="hljs-string">--name</span> <span class="hljs-string">v2ray</span> <span class="hljs-string">--volume</span> <span class="hljs-string">/var/lib/v2ray:/etc/v2ray:z</span> <span class="hljs-string">--net=host</span> <span class="hljs-string">docker.io/v2fly/v2fly-core:latest</span><br>        <span class="hljs-string">ExecStop=/bin/podman</span> <span class="hljs-string">stop</span> <span class="hljs-string">v2ray</span><br><br>        [<span class="hljs-string">Install</span>]<br>        <span class="hljs-string">WantedBy=multi-user.target</span><br></code></pre></div></td></tr></table></figure> 这个 unit 会通过 <a target="_blank" rel="noopener" href="https://podman.io/">Podman</a> 拉取 <a target="_blank" rel="noopener" href="https://hub.docker.com/r/v2fly/v2fly-core">V2ray 的 Docker 镜像</a> 并创建一个容器，将 <code>/var/lib/v2ray</code> 挂载到容器内的 <code>/etc/v2ray</code>，并指定 <code>net=host</code>，也就是容器不隔离网络。</p>
+<p>FCC 文件是一个易读的 Yaml 文件，之后要用 <a target="_blank" rel="noopener" href="https://github.com/coreos/butane">Butane</a> 工具进行转换。</p>
+<p>首先要安装 Butane</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">sudo dnf install butane<br></code></pre></div></td></tr></table></figure>
+<p>然后用你的 fcc 文件喂给它...假定它的名字是 <code>fcos.fcc</code> <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">butane fcos.fcc<br></code></pre></div></td></tr></table></figure> 于是会输出一段混沌的 json 到终端，这就是 ign 文件，复制这段输出。转到 <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8404229-6G">Vultr (With Referral)</a>，创建服务器，选择区域并在 <code>Server Type</code> 处选择 CoreOS： <img src="https://cdn.jsdelivr.net/gh/karuboniru/blog_imgs@master/20210506233322.png" srcset="/img/loading.gif" lazyload alt="Vultr Server Type" /> 把上面的 <code>butane fcos.fcc</code> 的输出粘贴到框框里面。然后按需修改配置，选择 <code>Deploy Now</code> 就完成了部署。记下 ip 配置好客户端就能用了。</p>
+<hr />
+<p>OK，接下来就是肮脏的 workarounds 了</p>
+<h2 id="vultr-的-fedora-coreos-太老了">Vultr 的 Fedora CoreOS 太老了</h2>
+<p>我虽然在工单系统反馈了这个问题，但是估计一时半会不会有修复，你可能需要手动上去 <code>rpm-ostree update</code> 更新一下——因为 CoreOS 自带的 <code>zincati</code> 在那个版本上面是默认禁用自动更新的。</p>
+<p>你也可以加上 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">links:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/zincati/config.d/95-disable-on-dev.toml</span><br>    <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">target:</span> <span class="hljs-string">/dev/null</span><br>    <span class="hljs-attr">hard:</span> <span class="hljs-literal">false</span><br></code></pre></div></td></tr></table></figure> 到 <code>storage</code> 部分，这会启用自动更新，理论上它会允许系统随后自动更新到最新版本的 CoreOS。</p>
+<h2 id="开-bbr">开 BBR</h2>
+<p>这个简单，在 <code>files</code> 下面加上 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/modules-load.d/80-bbr.conf</span><br>  <span class="hljs-attr">contents:</span><br>    <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>      <span class="hljs-string">tcp_bbr</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/sysctl.d/80-bbr.conf</span><br>  <span class="hljs-attr">contents:</span><br>    <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>      <span class="hljs-string">net.ipv4.tcp_congestion_control</span> <span class="hljs-string">=</span> <span class="hljs-string">bbr</span>  <br></code></pre></div></td></tr></table></figure> 就有了 BBR。</p>
+<h2 id="用-sshd.socket-而不是-sshd.service">用 <code>sshd.socket</code> 而不是 <code>sshd.service</code></h2>
+<p>可能能省点内存，因为 ssh 用的并不是很频繁。但是可能因为 Vultr 的 CoreOS 版本太老的原因，在 <code>systemd</code> 段加上： <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">sshd.socket</span><br>  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">sshd.service</span><br>  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">false</span><br></code></pre></div></td></tr></table></figure> 不好使，需要做的是在 <code>systemd</code> 段加上 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">sshd.socket</span><br>  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br></code></pre></div></td></tr></table></figure> 并在 <code>links</code> 里面加上 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/systemd/system/sshd.service</span><br>  <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">target:</span> <span class="hljs-string">/dev/null</span><br>  <span class="hljs-attr">hard:</span> <span class="hljs-literal">false</span><br></code></pre></div></td></tr></table></figure> 来 mask 掉 <code>sshd.service</code>。</p>
+<h2 id="切换到-cgroup-v2">切换到 CGroup V2</h2>
+<p>只是个人喜好罢了...在 <code>systemd</code> 段下面加 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">cgroups-v2-karg.service</span><br>  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">contents:</span> <span class="hljs-string">|</span><br>    [<span class="hljs-string">Unit</span>]<br>    <span class="hljs-string">Description=Switch</span> <span class="hljs-string">To</span> <span class="hljs-string">cgroups</span> <span class="hljs-string">v2</span><br>    <span class="hljs-comment"># We run after `systemd-machine-id-commit.service` to ensure that</span><br>    <span class="hljs-comment"># `ConditionFirstBoot=true` services won&#x27;t rerun on the next boot.</span><br>    <span class="hljs-string">After=systemd-machine-id-commit.service</span><br>    <span class="hljs-string">ConditionKernelCommandLine=systemd.unified_cgroup_hierarchy</span><br>    <span class="hljs-string">ConditionPathExists=!/var/lib/cgroups-v2-karg.stamp</span><br><br>    [<span class="hljs-string">Service</span>]<br>    <span class="hljs-string">Type=oneshot</span><br>    <span class="hljs-string">RemainAfterExit=yes</span><br>    <span class="hljs-string">ExecStart=/bin/rpm-ostree</span> <span class="hljs-string">kargs</span> <span class="hljs-string">--delete=systemd.unified_cgroup_hierarchy</span><br>    <span class="hljs-string">ExecStart=/bin/touch</span> <span class="hljs-string">/var/lib/cgroups-v2-karg.stamp</span><br>    <span class="hljs-string">ExecStart=/bin/systemctl</span> <span class="hljs-string">--no-block</span> <span class="hljs-string">reboot</span><br><br>    [<span class="hljs-string">Install</span>]<br>    <span class="hljs-string">WantedBy=multi-user.target</span><br></code></pre></div></td></tr></table></figure></p>
+<h2 id="更改-ign-文件重新部署">更改 ign 文件重新部署</h2>
+<p>令人震惊的是，Vultr 不提供这个功能，他们的技术支持建议是 reserve 现在的 ip，应用到新部署的机器上...听着就很傻。于是只能曲线救国：</p>
+<h3 id="把真正的-ign-文件放到-github-gist">把真正的 ign 文件放到 GitHub Gist</h3>
+<p>在 <a target="_blank" rel="noopener" href="https://gist.github.com/">Gist</a> 放下前面 butane 输出的 ign 文件（最好是 Secret Gist）。然后导出它的 raw 链接，一般格式是：<code>https://gist.githubusercontent.com/&lt;username&gt;/&lt;id&gt;/raw/&lt;commit&gt;/&lt;name&gt;.ign</code>，对应的写一个 fcc 文件，内容是 <figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">variant:</span> <span class="hljs-string">fcos</span><br><span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span><br><span class="hljs-attr">ignition:</span><br>  <span class="hljs-attr">config:</span><br>    <span class="hljs-attr">replace:</span><br>      <span class="hljs-attr">source:</span> <span class="hljs-string">https://gist.githubusercontent.com/&lt;username&gt;/&lt;id&gt;/raw/&lt;name&gt;.ign</span><br></code></pre></div></td></tr></table></figure> 里面链接要去掉 <code>&lt;commit&gt;</code> 这一级，保证始终拉取最新版本。要是有更好的存放 ign 文件的地方欢迎指出。</p>
+<p>于是用这个 fcc 文件，配合 butane 输出 ign 文件部署。之后想要更改 ign 重新部署就更改对应 Gist，然后再 Vultr 面板选择 Reinstall 即可。</p>
+<h2 id="我的-firewalld-呢">我的 FirewallD 呢</h2>
+<p>答案是 FirewallD 没了，整个 CoreOS 就没 Python，自然就没了 FirewallD。虽然可以靠 <code>/etc/sysconfig/nftables.conf</code> + <code>nftables.service</code> 解决问题，但是考虑到 CoreOS 上本来就没运行需要拦住的服务，于是没有防火墙就没有吧XD。</p>
+<hr />
+<h2 id="最后-fcc-文件长啥样">最后 FCC 文件长啥样</h2>
+<figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Yaml"><span class="hljs-attr">variant:</span> <span class="hljs-string">fcos</span><br><span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span><br><span class="hljs-attr">passwd:</span><br>  <span class="hljs-attr">users:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">core</span><br>      <span class="hljs-attr">ssh_authorized_keys:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFlngteAj8k7Fv0Ht6dFtQvA+Svxn/qnTuDfUzEvaU33QEyN9jDaJyMdct4elU9ec9aQheskwv5ULSvv7lzgs4ZhgtgGNRfH0mC8cI49DGdSxucaAuPiHmKNTfQa88iZxg== CARD AUTH pubkey pkcs11:id=%04;object=CARD%20AUTH%20pubkey;token=Karuboniru;manufacturer=piv_II?module-path=/usr/lib64/pkcs11/opensc-pkcs11.so&quot;</span><br>      <span class="hljs-attr">groups:</span> [ <span class="hljs-string">sudo</span>, <span class="hljs-string">wheel</span> ]<br><span class="hljs-attr">storage:</span><br>  <span class="hljs-attr">files:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/var/lib/v2ray/config.json</span><br>      <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <br>        <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>          &#123;<br>            <span class="hljs-attr">&quot;inbounds&quot;:</span> [<br>              &#123;<br>                <span class="hljs-attr">&quot;port&quot;:</span> <span class="hljs-string">&lt;YOUR-PORT-HERE&gt;</span>,<br>                <span class="hljs-attr">&quot;protocol&quot;:</span> <span class="hljs-string">&quot;vmess&quot;</span>,<br>                <span class="hljs-attr">&quot;settings&quot;:</span> &#123;<br>                  <span class="hljs-attr">&quot;clients&quot;:</span> [<br>                    &#123;<br>                      <span class="hljs-attr">&quot;id&quot;:</span> <span class="hljs-string">&quot;&lt;YOUR-UUID-HERE&gt;&quot;</span>,<br>                      <span class="hljs-attr">&quot;alterId&quot;:</span> <span class="hljs-number">64</span><br>                    &#125;   <br>                  ]<br>                &#125;<br>              &#125;<br>            ],<br>            <span class="hljs-attr">&quot;outbounds&quot;:</span> [<br>              &#123;<br>                <span class="hljs-attr">&quot;protocol&quot;:</span> <span class="hljs-string">&quot;freedom&quot;</span>,<br>                <span class="hljs-attr">&quot;settings&quot;:</span> &#123;&#125;<br>              &#125;<br>            ]<br>          &#125;<br>      <span class="hljs-attr">mode:</span> <span class="hljs-number">0644</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/modules-load.d/80-bbr.conf</span><br>      <span class="hljs-attr">contents:</span><br>        <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>          <span class="hljs-string">tcp_bbr</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/sysctl.d/80-bbr.conf</span><br>      <span class="hljs-attr">contents:</span><br>        <span class="hljs-attr">inline:</span> <span class="hljs-string">|</span><br>          <span class="hljs-string">net.ipv4.tcp_congestion_control</span> <span class="hljs-string">=</span> <span class="hljs-string">bbr</span>  <br>  <span class="hljs-attr">links:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/zincati/config.d/95-disable-on-dev.toml</span><br>      <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">target:</span> <span class="hljs-string">/dev/null</span><br>      <span class="hljs-attr">hard:</span> <span class="hljs-literal">false</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/etc/systemd/system/sshd.service</span><br>      <span class="hljs-attr">overwrite:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">target:</span> <span class="hljs-string">/dev/null</span><br>      <span class="hljs-attr">hard:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">systemd:</span><br>  <span class="hljs-attr">units:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">v2ray.service</span><br>      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <span class="hljs-string">|</span><br>        [<span class="hljs-string">Unit</span>]<br>        <span class="hljs-string">Description=Run</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">After=network-online.target</span><br>        <span class="hljs-string">Wants=network-online.target</span><br><br>        [<span class="hljs-string">Service</span>]<br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">kill</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">rm</span> <span class="hljs-string">v2ray</span><br>        <span class="hljs-string">ExecStartPre=-/bin/podman</span> <span class="hljs-string">pull</span> <span class="hljs-string">docker.io/v2fly/v2fly-core:latest</span><br>        <span class="hljs-string">ExecStart=/bin/podman</span> <span class="hljs-string">run</span> <span class="hljs-string">--name</span> <span class="hljs-string">v2ray</span> <span class="hljs-string">--volume</span> <span class="hljs-string">/var/lib/v2ray:/etc/v2ray:z</span> <span class="hljs-string">--net=host</span> <span class="hljs-string">docker.io/v2fly/v2fly-core:latest</span><br>        <span class="hljs-string">ExecStop=/bin/podman</span> <span class="hljs-string">stop</span> <span class="hljs-string">v2ray</span><br><br>        [<span class="hljs-string">Install</span>]<br>        <span class="hljs-string">WantedBy=multi-user.target</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">cgroups-v2-karg.service</span><br>      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">contents:</span> <span class="hljs-string">|</span><br>        [<span class="hljs-string">Unit</span>]<br>        <span class="hljs-string">Description=Switch</span> <span class="hljs-string">To</span> <span class="hljs-string">cgroups</span> <span class="hljs-string">v2</span><br>        <span class="hljs-comment"># We run after `systemd-machine-id-commit.service` to ensure that</span><br>        <span class="hljs-comment"># `ConditionFirstBoot=true` services won&#x27;t rerun on the next boot.</span><br>        <span class="hljs-string">After=systemd-machine-id-commit.service</span><br>        <span class="hljs-string">ConditionKernelCommandLine=systemd.unified_cgroup_hierarchy</span><br>        <span class="hljs-string">ConditionPathExists=!/var/lib/cgroups-v2-karg.stamp</span><br><br>        [<span class="hljs-string">Service</span>]<br>        <span class="hljs-string">Type=oneshot</span><br>        <span class="hljs-string">RemainAfterExit=yes</span><br>        <span class="hljs-string">ExecStart=/bin/rpm-ostree</span> <span class="hljs-string">kargs</span> <span class="hljs-string">--delete=systemd.unified_cgroup_hierarchy</span><br>        <span class="hljs-string">ExecStart=/bin/touch</span> <span class="hljs-string">/var/lib/cgroups-v2-karg.stamp</span><br>        <span class="hljs-string">ExecStart=/bin/systemctl</span> <span class="hljs-string">--no-block</span> <span class="hljs-string">reboot</span><br><br>        [<span class="hljs-string">Install</span>]<br>        <span class="hljs-string">WantedBy=multi-user.target</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">sshd.socket</span><br>      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br></code></pre></div></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="nofollow noopener noopener">CC BY-NC-SA 4.0 协议</a> 。转载请注明出处，除非获得明示许可，禁止商用！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/30/systemd-boot-and-unified-kernel-image/">
+                        <span class="hidden-mobile">Switch to systemd-boot and Unified Kernel Image on Fedora</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "3Ba5gx25NWO2GvMddRuroM3X-MdYXbMMI",
+          app_key: "3D7nE7MewcNG0YGY57FMfxpb",
+          placeholder: "评论区",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "https://comment.yanqiyu.info",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">检查到页面更新</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">检查到页面有更新, 是否刷新以查看最新版本?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">忽略</button><button type="button" class="btn btn-primary" onClick="window.location.reload();">刷新</button></div></div></div></div><script>if ('serviceWorker' in navigator) {if (navigator.serviceWorker.controller) {navigator.serviceWorker.addEventListener('controllerchange', function() {showNotification();});}window.addEventListener('load', function() {navigator.serviceWorker.register('/sw.js');});}function showNotification() {$('#update').modal('show');}</script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109230557-1"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-109230557-1');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

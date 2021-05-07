@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <link rel="icon" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="theme-color" content="#04425E">
+  <meta name="description" content="羰基的博客">
+  <meta name="author" content="Karuboniru">
+  <meta name="keywords" content="技术, 杂谈, 吐槽">
+  
+  <title>轻松的安装 Geant4 - Karuboniru&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749771_l0gzaaun88e.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/addon.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yanqiyu.info","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":"UA-109230557-1","tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null},"tajs":null}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.0.2"><link rel="alternate" href="/atom.xml" title="Karuboniru's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Karuboniru's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/default.webp') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="轻松的安装 Geant4">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-09-26 11:23" pubdate>
+        星期六, 九月 26日 2020, 11:23 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      871 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      10
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">轻松的安装 Geant4</h1>
+            
+            <div class="markdown-body">
+              <div class="note note-info">
+            <p>本文主要是给组里面的同学们快速配置自己的 Geant 4 之用</p>
+          </div>
+<div class="note note-info">
+            <p>本文使用 Fedora 操作系统（或者是其 WSL remix）</p>
+          </div>
+<div class="note note-info">
+            <p>如果你是高贵的 Arch 用户，AUR 里面貌似有现成的 Geant 4, 也是开箱即用的，但是 Arch 用户大概不需要这篇文章</p>
+          </div>
+<h2 id="在-wsl-中配置你的-fedora-环境">在 WSL 中配置你的 Fedora 环境</h2>
+<p>对于原生 Linux 用户，请忽略这一节。</p>
+<h3 id="启用-wsl-与安装-linux">启用 WSL 与安装 Linux</h3>
+<p>请参阅<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35801201">这篇文章</a>的“为 WSL 做准备”章节，启用你的 Windows 下的 WSL。然后在<a target="_blank" rel="noopener" href="https://github.com/WhitewaterFoundry/Fedora-Remix-for-WSL/releases/tag/31.5.0">Fedora Remix for WSL 发表页面</a>下载那个<code>appxbundle</code>文件，双击安装这个软件包，然后打开安装的程序，按照提示进行设置用户名以及密码。</p>
+<h3 id="安装-xserver">安装 XServer</h3>
+<p>为了能正确使用 ROOT/Geant4 的图形界面，你需要安装 XServer。在<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/">这里</a>下载，安装后启动，全部选择默认配置即可。</p>
+<p>然后在 WSL 中运行 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;export DISPLAY=127.0.0.1:0&#x27;</span> &gt;&gt; ~/.bashrc<br></code></pre></div></td></tr></table></figure></p>
+<h3 id="伪装-release-信息">伪装 release 信息</h3>
+<p>运行 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">sudo dnf install fedora-release --allowerasing <br></code></pre></div></td></tr></table></figure></p>
+<p>WSL 配置至此结束，接下来是安装 Geant 4 以及 ROOT。</p>
+<h2 id="安装-geant-4">安装 Geant 4</h2>
+<p>运行 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">sudo dnf copr <span class="hljs-built_in">enable</span> yanqiyu/geant4<br>sudo dnf install geant4 geant4-data geant4-devel geant4-examples<br></code></pre></div></td></tr></table></figure> 就完成了安装。</p>
+<h3 id="编译安装">编译安装</h3>
+<div class="note note-warning">
+            <p>我不怎么建议自己编译安装，因为编译慢，安装的位置不好还需要手动设置一下环境变量</p>
+          </div>
+<p>下载 Geant 4 的源代码，然后解压 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">mkdir build &amp;&amp; <span class="hljs-built_in">cd</span> build<br>cmake    -DGEANT4_BUILD_MULTITHREADED=ON \<br>         -DGEANT4_INSTALL_DATA=ON \<br>         -DGEANT4_USE_GDML=ON \<br>         -DGEANT4_USE_G3TOG4=ON \<br>         -DGEANT4_USE_QT=ON \<br>         -DOpenGL_GL_PREFERENCE=GLVND \<br>         -DGEANT4_USE_XM=ON \<br>         -DGEANT4_USE_OPENGL_X11=ON \<br>         -DGEANT4_USE_INVENTOR=OFF \<br>         -DGEANT4_USE_RAYTRACER_X11=ON \<br>         -DGEANT4_USE_SYSTEM_CLHEP=OFF \<br>         -DGEANT4_USE_SYSTEM_EXPAT=ON \<br>         -DGEANT4_USE_SYSTEM_ZLIB=ON \<br>         ..<br>make -jN（N 替换为你的 CPU 线程数）<br>make install<br></code></pre></div></td></tr></table></figure> 要是提示缺依赖就照着提示找依赖安装。</p>
+<p>自己编译安装的版本需要运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> /path/to/geant4.sh<br></code></pre></div></td></tr></table></figure>
+<p>来设置环境变量，通过源安装的不需要。</p>
+<h2 id="安装-root">安装 ROOT</h2>
+<p>在多数情况下，可以通过安装 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">sudo dnf install root-hist-painter root-physics root-mathmore root-tree-dataframe root-hist root-spectrum root-net root-tree-ntuple root-graf-x11 root-graf3d root-vecops root-matrix root root-multiproc root-icons root-tree root-graf-postscript root-gui root-graf-gpad root-tree-player root-cling root-minuit root-fonts root-graf-asimage root-graf root-core root-mathcore root-io root-gui-ged<br></code></pre></div></td></tr></table></figure> 就足以支撑大部分 Geant4 开发之用，要是 <code>cmake</code> 的时候提示缺文件就再安装就行。</p>
+<h2 id="基本程序框架">基本程序框架</h2>
+<ul>
+<li><code>physicsList</code>, 一般是 <code>G4VModularPhysicsList</code> 以及其派生的预定义物理类型, 这个类负责定义模拟中的物理过程;</li>
+<li><code>DetectorConstruction</code>, 派生自<code>G4VUserDetectorConstruction</code> 负责构建探测器的几何结构以及材料;</li>
+<li><code>ActionInitialization</code> 派生自 <code>G4VUserActionInitialization</code>, 主要工作是对于模拟进行准备操作, 通过 <code>SetUserAction</code> 来实现注册各个其他运行相关的类, 在简单的程序中包括 <code>RunAction</code>, <code>EventAction</code>, <code>SteppingAction</code>, <code>PrimaryGeneratorAction</code> , 如果需要保存直方图的话就要加上 <code>HistoManager</code> ;</li>
+<li><code>RunAction</code> 派生自 <code>G4UserRunAction</code>, 这个类定义了每个 run 的操作;</li>
+<li><code>PrimaryGeneratorAction</code> , 派生自 <code>G4VUserPrimaryGeneratorAction</code> , 也就送描述粒子源的行为;</li>
+<li><code>EventAction</code> 派生自 <code>G4UserEventAction</code>, 描述的是一个模拟的 Event 的过程, 一般处理的事情是按照设计统计每个 Step 中物理过程的能量沉积等数据, 并填充 tuple;</li>
+<li><code>SteppingAction</code> 派生自 <code>G4UserSteppingAction</code>, 处理模拟过程每个 step, 每个 step 中 <code>UserSteppingAction</code> 都会被调用, 并传入一个 <code>G4Step</code> 参数, 可以获取这个 step 中的物理过程.</li>
+<li><code>HistoManager</code>, 它一般是负责保存直方图到 <code>ROOT</code> 文件以供进一步操作的;</li>
+<li>对于一些类来说, 还可以有它的 <code>messenger</code> 用于处理命令.</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%89%A9%E7%90%86/">物理</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Geant-4/">Geant 4</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="nofollow noopener noopener">CC BY-NC-SA 4.0 协议</a> 。转载请注明出处，除非获得明示许可，禁止商用！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/06/fcitx5-fedora-updated/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何更加优雅的在 fedora 上安装 fcitx5</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/30/fcitx5-fedora/">
+                        <span class="hidden-mobile">如何下周就在 Fedora 32 用上 Fcitx 5</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "3Ba5gx25NWO2GvMddRuroM3X-MdYXbMMI",
+          app_key: "3D7nE7MewcNG0YGY57FMfxpb",
+          placeholder: "评论区",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "https://comment.yanqiyu.info",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">检查到页面更新</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">检查到页面有更新, 是否刷新以查看最新版本?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">忽略</button><button type="button" class="btn btn-primary" onClick="window.location.reload();">刷新</button></div></div></div></div><script>if ('serviceWorker' in navigator) {if (navigator.serviceWorker.controller) {navigator.serviceWorker.addEventListener('controllerchange', function() {showNotification();});}window.addEventListener('load', function() {navigator.serviceWorker.register('/sw.js');});}function showNotification() {$('#update').modal('show');}</script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109230557-1"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-109230557-1');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

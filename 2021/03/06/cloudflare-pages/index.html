@@ -1,0 +1,661 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <link rel="icon" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="theme-color" content="#04425E">
+  <meta name="description" content="羰基的博客">
+  <meta name="author" content="Karuboniru">
+  <meta name="keywords" content="技术, 杂谈, 吐槽">
+  
+  <title>我是来吹 Cloudflare Pages 的 - Karuboniru&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749771_l0gzaaun88e.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/addon.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yanqiyu.info","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":"UA-109230557-1","tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null},"tajs":null}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.0.2"><link rel="alternate" href="/atom.xml" title="Karuboniru's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Karuboniru's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/default.webp') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="我是来吹 Cloudflare Pages 的">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-06 11:53" pubdate>
+        星期六, 三月 6日 2021, 11:53 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      540 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      6
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">我是来吹 Cloudflare Pages 的</h1>
+            
+            <div class="markdown-body">
+              <h2 id="迁移博客到-cloudflare-pages">迁移博客到 Cloudflare Pages</h2>
+<blockquote>
+<p>薅羊毛，就要薅到底</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://pages.dev/"><img src="https://cdn.jsdelivr.net/gh/karuboniru/blog_imgs@master/20210306115901.png" srcset="/img/loading.gif" lazyload alt="Cloudflare 介绍页面" /></a></p>
+<p>突然发现 Cloudflare 的新静态网页托管服务结束了内测，变得可用。考虑到现在站点是 Github Pages + Cloudflare CDN 搭建，于是干脆一不做二不休换成 Cloudflare Pages 算了。 <del>没有中间商赚差价</del> 我也不用粗暴的在每次 GitHub Actions 之后做一次缓存清除（以免 Cloudflare 缓存了旧的页面而没有及时更新）。</p>
+<p>切换到 Cloudflare Pages 整体上很容易，在 <a target="_blank" rel="noopener" href="https://pages.dev/">Pages</a> 页面点击那个大大的黄色的 Get Started 按钮，按照指引授权 GitHub 权限、选择构建使用的仓库、最后设置构建的命令就完成了迁移... 好吧，这是最简单的情况，适用于你的站点只需要最简单的命令即可构建时，例如下表中的框架：</p>
+<center>
+<table>
+<thead>
+<tr class="header">
+<th>框架</th>
+<th>构建命令</th>
+<th>输出目录</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Angular (Angular CLI)</td>
+<td><code>ng build</code></td>
+<td><code>dist</code></td>
+</tr>
+<tr class="even">
+<td>Brunch</td>
+<td><code>brunch build --production</code></td>
+<td><code>public</code></td>
+</tr>
+<tr class="odd">
+<td>Docusaurus</td>
+<td><code>npm run build</code></td>
+<td><code>build</code></td>
+</tr>
+<tr class="even">
+<td>Eleventy</td>
+<td><code>eleventy</code></td>
+<td><code>_site</code></td>
+</tr>
+<tr class="odd">
+<td>Ember.js</td>
+<td><code>ember build</code></td>
+<td><code>dist</code></td>
+</tr>
+<tr class="even">
+<td>Gatsby</td>
+<td><code>gatsby build</code></td>
+<td><code>public</code></td>
+</tr>
+<tr class="odd">
+<td>GitBook</td>
+<td><code>gitbook build</code></td>
+<td><code>_book</code></td>
+</tr>
+<tr class="even">
+<td>Gridsome</td>
+<td><code>gridsome build</code></td>
+<td><code>dist</code></td>
+</tr>
+<tr class="odd">
+<td>Hugo</td>
+<td><code>hugo</code></td>
+<td><code>public</code></td>
+</tr>
+<tr class="even">
+<td>Jekyll</td>
+<td><code>jekyll build</code></td>
+<td><code>_site</code></td>
+</tr>
+<tr class="odd">
+<td>Mkdocs</td>
+<td><code>mkdocs build</code></td>
+<td><code>site</code></td>
+</tr>
+<tr class="even">
+<td>Next.js (Static HTML Export)</td>
+<td><code>next build &amp;&amp; next export</code></td>
+<td><code>out</code></td>
+</tr>
+<tr class="odd">
+<td>Nuxt.js</td>
+<td><code>nuxt generate</code></td>
+<td><code>dist</code></td>
+</tr>
+<tr class="even">
+<td>Pelican</td>
+<td><code>pelican $content [-s settings.py]</code></td>
+<td><code>output</code></td>
+</tr>
+<tr class="odd">
+<td>React (create-react-app)</td>
+<td><code>npm run build</code></td>
+<td><code>build</code></td>
+</tr>
+<tr class="even">
+<td>React Static</td>
+<td><code>react-static build</code></td>
+<td><code>dist</code></td>
+</tr>
+<tr class="odd">
+<td>Slate</td>
+<td><code>./deploy.sh</code></td>
+<td><code>build</code></td>
+</tr>
+<tr class="even">
+<td>Svelte</td>
+<td><code>npm run build</code></td>
+<td><code>public</code></td>
+</tr>
+<tr class="odd">
+<td>Umi</td>
+<td><code>umi build</code></td>
+<td><code>dist</code></td>
+</tr>
+<tr class="even">
+<td>Vue</td>
+<td><code>npm run build</code></td>
+<td><code>public</code></td>
+</tr>
+<tr class="odd">
+<td>VuePress</td>
+<td><code>vuepress build $directory</code></td>
+<td><code>$directory/.vuepress/dist</code></td>
+</tr>
+</tbody>
+</table>
+</center>
+<h3 id="我想要运行自定义脚本">我想要运行自定义脚本！</h3>
+<p>那你就放一个<a target="_blank" rel="noopener" href="https://github.com/karuboniru/blog_ci/blob/master/build.sh">自定义脚本</a>在你的仓库里面呗。构建命令就是 <code>./build.sh</code>, 记得加上 <code>+x</code> 权限。</p>
+<h2 id="相对于使用-github-actions-部署有什么好处坏处">相对于使用 GitHub Actions 部署有什么好处/坏处？</h2>
+<p>一方面 GitHub Actions 更快，Cloudflare Pages 的服务有时候会莫名其妙的卡几分钟到几十分钟在 <code>正在初始化构建环境</code> 阶段。但是 Cloudflare Pages 能优雅的处理 Pull Request 并且提供预览页面。</p>
+<p>总之 Cloudflare 家大业大，并且是专门做网络服务的，做网页托管 <strong>应该</strong> 不会太菜吧。</p>
+<p>另外 Cloudflare 的那个 Proxy 对于他们自己托管的页面不好使，可以看 <a target="_blank" rel="noopener" href="https://discord.com/channels/595317990191398933/789155108529111069/817438688555827280">discord 聊天记录</a>，但是之后会修。还有些别的可能的坑可以看看 <a target="_blank" rel="noopener" href="https://developers.cloudflare.com/pages/platform/known-issues">已知问题</a>。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="nofollow noopener noopener">CC BY-NC-SA 4.0 协议</a> 。转载请注明出处，除非获得明示许可，禁止商用！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/15/yolo-fedora34/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">莽一把，升级 Fedora 34</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/06/fcitx5-fedora-updated/">
+                        <span class="hidden-mobile">如何更加优雅的在 fedora 上安装 fcitx5</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "3Ba5gx25NWO2GvMddRuroM3X-MdYXbMMI",
+          app_key: "3D7nE7MewcNG0YGY57FMfxpb",
+          placeholder: "评论区",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "https://comment.yanqiyu.info",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">检查到页面更新</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">检查到页面有更新, 是否刷新以查看最新版本?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">忽略</button><button type="button" class="btn btn-primary" onClick="window.location.reload();">刷新</button></div></div></div></div><script>if ('serviceWorker' in navigator) {if (navigator.serviceWorker.controller) {navigator.serviceWorker.addEventListener('controllerchange', function() {showNotification();});}window.addEventListener('load', function() {navigator.serviceWorker.register('/sw.js');});}function showNotification() {$('#update').modal('show');}</script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109230557-1"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-109230557-1');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <link rel="icon" href="//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/favicon.webp">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="theme-color" content="#04425E">
+  <meta name="description" content="羰基的博客">
+  <meta name="author" content="Karuboniru">
+  <meta name="keywords" content="技术, 杂谈, 吐槽">
+  
+  <title>如何下周就在 Fedora 32 用上 Fcitx 5 - Karuboniru&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/css/font_1749771_l0gzaaun88e.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/addon.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yanqiyu.info","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":"UA-109230557-1","tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null},"tajs":null}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.0.2"><link rel="alternate" href="/atom.xml" title="Karuboniru's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Karuboniru's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('//cdn.jsdelivr.net/gh/karuboniru/blog_ci@master/source/img/default.webp') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="如何下周就在 Fedora 32 用上 Fcitx 5">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-08-30 17:44" pubdate>
+        星期日, 八月 30日 2020, 5:44 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      12
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">如何下周就在 Fedora 32 用上 Fcitx 5</h1>
+            
+            <div class="markdown-body">
+              <p>本文内容已经严重过时，请参阅 <a href="/2020/11/06/fcitx5-fedora-updated/" title="这篇更新的文章">这篇更新的文章</a> 设置你的 fcitx5</p>
+<hr />
+<p>一开始想了想要不要在标题写 Fedora，觉得还是必要的。因为目前只有 Arch Linux （和 Debian 和 Ubuntu）出于套近乎的关系有了 Fcitx 5 全家桶。</p>
+<p>为什么是下周？——因为 Fedora 的 QA，<strong>包最长会在 <a target="_blank" rel="noopener" href="https://bodhi.fedoraproject.org/updates/FEDORA-2020-5465c02630">Bodhi</a> 等一周，除非你们帮忙测试，点个 upvote</strong> (๑•̀ㅂ•́)و✧。</p>
+<p>测试大概明天或者后天上线，想要参与就<code>dnf install --enablerepo=updates-testing</code>来进行安装。</p>
+<hr />
+<h2 id="建议安装的包">建议安装的包</h2>
+<ul>
+<li>fcitx5<br />
+</li>
+<li>fcitx5-gtk</li>
+<li>fcitx5-qt</li>
+<li>fcitx5-configtool<br />
+</li>
+<li>fcitx5-chinese-addons</li>
+</ul>
+<p>另外之前用了我的 <a target="_blank" rel="noopener" href="https://copr.fedorainfracloud.org/coprs/yanqiyu/fcitx5">copr</a> 版本的人，请保证把里面的包卸载之后在进行安装，否则可能出现奇妙的冲突。</p>
+<p>虽然在别的发行版上面最新的 Fcitx 4/5 不能共存，但是在 Fedora 上能，rpm 能优雅的处理表面上的文件冲突。 对于原因感兴趣的可见<a target="_blank" rel="noopener" href="https://t.me/fedorazh/63996">群里面的讨论</a>的上下文。</p>
+<h2 id="环境变量和自启动">环境变量和自启动</h2>
+<h3 id="对于-kde-用户">对于 KDE 用户</h3>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">$ sudo alternatives --config xinputrc<br></code></pre></div></td></tr></table></figure>
+<p>即可修改全局输入法配置。但是想要修改自己的输入法配置可以考虑 im-settings 或者下面的方法。</p>
+<h3 id="通用办法">通用办法</h3>
+<p>写一个 <figure class="highlight ini"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs ini"><span class="hljs-attr">INPUT_METHOD</span>=fcitx5<br><span class="hljs-attr">GTK_IM_MODULE</span>=fcitx5<br><span class="hljs-attr">QT_IM_MODULE</span>=fcitx5<br><span class="hljs-attr">XMODIFIERS</span>=@im=fcitx5<br></code></pre></div></td></tr></table></figure> 放到 <code>~/.config/environment.d/00-fcitx5.conf</code></p>
+<p>然后运行（当然 <code>ln -s</code> 可以换成 <code>cp</code>） <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Bash">$ ln -s /usr/share/applications/fcitx5.desktop ~/.config/autostart/<br></code></pre></div></td></tr></table></figure> 同样<strong>注销之后重新登陆</strong>就会生效。</p>
+<p>别的情况可以酌情尝试上述两种办法，应该至少有一种会生效。</p>
+<h2 id="一些其他的提示">一些其他的提示</h2>
+<h3 id="对于-gnome-用户">对于 Gnome 用户</h3>
+<p>见 <a target="_blank" rel="noopener" href="https://plumz.me/archives/11740/">李先生的博客</a> 文章，建议安装 <strong>kimpanel</strong> 插件以改善体验。(以下引用 block 是直接厚颜无耻照抄的, 意味着内容可能过时，没准 Gnome 商店的版本也超级好使呢？)</p>
+<blockquote>
+<p>众所周知，网络上吹 Fcitx 5 的用户大多数都是 Arch Linux 用户、而且用的都是 KDE，没有人告诉你 Gnome-shell 要怎么办，不过万幸的是伟大的囧脸的 Gnome shell 插件是支持 Fcitx 5 的，因为用的都是 Kimpanel，也就是说，装了这个 Gnome-shell extension，无论你是 Fcitx 4 还是 Fcitx 5，都是可以用的，赞美囧脸！ 不过这个插件在 Gnome 官方的 Extension 网站上的版本有一些问题：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/wengxt/gnome-shell-extension-kimpanel/issues/46">快速打字的时候会出现部分内容显示不全</a></li>
+<li>多显示器的时候会跨越显示器出现选字框</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wengxt/gnome-shell-extension-kimpanel/issues/47">锁屏后解锁会出现两个 Indicator</a></li>
+</ul>
+<p>不过这三个问题都已经被囧脸修复了，赞美囧脸！</p>
+<p>安装的话还是推荐安装 git 的版本，因为官方的还没有更新： <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/wengxt/g</span>nome-shell-extension-kimpanel<br></code></pre></div></td></tr></table></figure> 安装依赖：gettext cmake 后直接在目录下运行 ./install.sh 就可以了，记得把原本的插件删掉再装。</p>
+</blockquote>
+<h3 id="图形界面配置工具">图形界面配置工具</h3>
+<p><code>fcitx5-configtool</code> 含有 <code>fcitx5-config-qt</code>，安装之后<code>fcitx5-config</code>就会调用之。另外还支持KCM配置，当然是KDE用户专享了。</p>
+<h2 id="bug-report">Bug Report</h2>
+<p>遇到问题，建议先在<a target="_blank" rel="noopener" href="https://bugzilla.redhat.com/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;classification=Fedora&amp;component=fcitx5&amp;list_id=11319828&amp;product=Fedora&amp;product=Fedora%20EPEL">Bugzilla</a>反馈，如果是我的锅（打包翻车），我就修。如果是囧脸的锅，那我就找囧脸修。</p>
+<p>当然要是你能判断是囧脸的锅，建议直接去上游找囧脸修。</p>
+<h2 id="todo-list">TODO List</h2>
+<ul>
+<li>
+            <input type="checkbox" disabled checked="checked">fcitx5-configtool 拆包
+          
+，把 <code>kcm-fcitx5</code> 拆出来: <strong>已经在 rawhide 中完成，F32 再等等就 push</strong></li>
+<li><input type="checkbox" disabled >
+fcitx5-chinese-addons 拆包</li>
+<li><input type="checkbox" disabled >
+<del>Fedora 31 上的编译</del>, 不会有了, 因为貌似 fmt 版本太老, 编译不过, 这个包 F31 Mass Rebuild 之后居然就没更新过. 虽然我可以 Bundle 一个 header-only 的 fmt.</li>
+</ul>
+<p><em>为什么现在不做，这些事情不复杂啊？</em> ——懒，但是要是你确实需要，<a href="mailto:yanqiyu@fedoraproject.org">给我说一声</a>，我尽快😂</p>
+<h2 id="此处应该感谢囧脸">此处应该感谢<a target="_blank" rel="noopener" href="https://www.csslayer.info/">囧脸</a></h2>
+<p>CSSlayer（囧脸）对于打包做出了巨大贡献，包括但不限于：</p>
+<ul>
+<li>舍去刷蹦蹦蹦的时间深夜来修 aarch64 上的 bug</li>
+<li>帮我识别出一个 s390x 上的错误的真正原因，还给 KenLM 提了 PR，修复了十有八九不会有活人遇到的 s390x 上的一个可能导致整个 chinese-addons 不好使的 bug</li>
+</ul>
+<hr />
+<p>最后高呼三遍：<strong>赞美囧脸！赞美囧脸！赞美囧脸！</strong></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%89%93%E5%8C%85/">打包</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="nofollow noopener noopener">CC BY-NC-SA 4.0 协议</a> 。转载请注明出处，除非获得明示许可，禁止商用！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/26/geant4-basic/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">轻松的安装 Geant4</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/22/enhanced-hyperv-for-fedora/">
+                        <span class="hidden-mobile">在 Hyper-V 会话中对于 Fedora 启用增强会话</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "3Ba5gx25NWO2GvMddRuroM3X-MdYXbMMI",
+          app_key: "3D7nE7MewcNG0YGY57FMfxpb",
+          placeholder: "评论区",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "https://comment.yanqiyu.info",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">检查到页面更新</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">检查到页面有更新, 是否刷新以查看最新版本?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">忽略</button><button type="button" class="btn btn-primary" onClick="window.location.reload();">刷新</button></div></div></div></div><script>if ('serviceWorker' in navigator) {if (navigator.serviceWorker.controller) {navigator.serviceWorker.addEventListener('controllerchange', function() {showNotification();});}window.addEventListener('load', function() {navigator.serviceWorker.register('/sw.js');});}function showNotification() {$('#update').modal('show');}</script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109230557-1"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-109230557-1');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>
